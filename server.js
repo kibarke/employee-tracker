@@ -21,6 +21,10 @@ const questions = [
         message: "What is the salary of the role?"
     },
     {
+        type: "input",
+        message: "What is the name of the department?",
+    },
+    {
         type: "checkbox",
         message: "Which department does the role belong to?",
         choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
