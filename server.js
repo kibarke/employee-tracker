@@ -192,18 +192,18 @@ var questions = function () {
     [
     
 
-    {
-        type: "input",
-        name: "departments",
-        message: "What is the name of the department?",
-    },
-    {
-        type: "checkbox",
-        message: "Which department does the role belong to?",
-        choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
-    },
-    {
+//     {
+//         type: "input",
+//         name: "departments",
+//         message: "What is the name of the department?",
+//     },
+//     {
+//         type: "checkbox",
+//         message: "Which department does the role belong to?",
+//         choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
+//     },
+//     {
         
-    },
+//     },
     
-];
+// ];
