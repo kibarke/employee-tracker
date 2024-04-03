@@ -185,7 +185,16 @@ var questions = function () {
                         }
                     }
                 }
-            ])
+            ]).then((answers) => {
+                // Comparing and storing reults, I think this is for the table
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].title === answers.role) {
+                        let role = result[i];
+                    }
+                }
+
+                dragonBird.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id],)
+            })
         })
     }
     
