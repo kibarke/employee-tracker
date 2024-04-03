@@ -1,4 +1,4 @@
--- created table for work --
+-- created table for employees work --
 
 DROP DATABASE IF EXISTS people_tracker_db;
 CREATE DATABASE people_tracker_db;
