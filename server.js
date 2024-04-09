@@ -55,10 +55,11 @@ var questions = function () {
                     return false;
                 }
             }
+        
         }]).then(answers) => {
             dragonBird.query(`INSERT INTO department (name) VALUES (?)`, [answers.departments], (err, result) => {
                 if (err) throw err;
-                console.log(`Added ${answers.departments} to the database.`)
+                console.log(`Added ${answers.departments} to the Bat Computer.`)
                 people_tracker();
             });
     } else if (answers.prompt === 'Add A Role') {
@@ -117,7 +118,7 @@ var questions = function () {
             
                 dragonBird.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [answers.roles, answers.salary, department.id], (err, result) => {
                     if (err) throw err;
-                    console.log(`We added ${answers.role} to the database.`)
+                    console.log(`We added ${answers.role} to the Bat Computer.`)
                     people_tracker();
                 });
             })
@@ -186,33 +187,76 @@ var questions = function () {
                     }
                 }
             ]).then((answers) => {
-                // Comparing and storing reults, I think this is for the table
+                // Comparing and storing results, I think this is for the table
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].title === answers.role) {
                         let role = result[i];
                     }
                 }
 
-                dragonBird.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id],)
+                dragonBird.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id],(err, result) => {
+                    if (err) throw err;
+                    console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`)
+                    people_tracker();
+                });
             })
-        })
-    }
-    
-    [
-    
+        });
+    } else if (answers.prompt === 'Update An Employee Role') {
+        // calling the database/bat-computer to obtain the roles and managers
+        dragonBird.query(`SELECT * FROM employee, role`, (err, result) => {
+            if (err) throw err;
 
-    {
-        type: "input",
-        name: "departments",
-        message: "What is the name of the department?",
-    },
-    {
-        type: "checkbox",
-        message: "Which department does the role belong to?",
-        choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
-    },
-    {
-        
-    },
-    
-];
+            inquirer.prompt([
+                {
+                    // Employee Update
+                    type: 'list',
+                        name: 'employee',
+                        message: 'Which employee role do you want to update?',
+                        choices: () => {
+                            var array = [];
+                            for (var i = 0; i < result.length; i++) {
+                                array.push(result[i].last_name);
+                            }
+                            var employeeArray = [...new Set(array)];
+                            return employeeArray;
+                    }
+                },
+                {
+                    // Role Update
+                    type: 'list',
+                        name: 'role',
+                        message: 'What is their new role?',
+                        choices: () => {
+                            var array = [];
+                            for (var i = 0; i < result.length; i++) {
+                                array.push(result[i].title);
+                            }
+                            var newArray = [...new Set(array)];
+                            return newArray;
+                    }
+                }
+            ]).then((answers) => {
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].last_name === answers.employee) {
+                        var role = result[i];
+                    }
+                }
+
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].title === answers.role) {
+                        var role = result[i];
+                    }
+                }
+
+                dragonBird.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                    if (err) throw err;
+                    console.log(`Updated ${answers.employee} role to the Bat Computer.`)
+                })
+            })
+        });
+        } else if (answers.prompt === 'Log Out') {
+            dragonBird.end();
+            console.log("Bat Computer shutting down. Good-bye Batman!");
+        }
+    })
+};
