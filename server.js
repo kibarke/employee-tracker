@@ -206,7 +206,7 @@ var people_tracker = function () {
                         name: "employee",
                         message: "Which employees role do you want to update?",
                         choices: () => {
-                            var list [];
+                            var list = [];
                             for (var i = 0; i < result.length; i++) {
                                 list.push(result[i].last_name);
                             }
@@ -246,8 +246,9 @@ var people_tracker = function () {
                 });
             })
         });
-    } else if (answers.prompt === 'Log Out') {
-        batComputer.end();
-        console.log("Bat Computer Signing Off!");
-    }
-})
+        } else if (answers.prompt === 'Log Out') {
+            batComputer.end();
+            console.log("Bat Computer Signing Off!");
+        }
+    })    
+};
