@@ -12,7 +12,7 @@ batComputer.connect(err => {
 var people_tracker = function () {
     inquirer.prompt([{
         // Beginning the command line
-        type: 'checkbox',
+        type: 'list',
         name: 'prompt',
         message: 'What would you like to do?',
         choices: ["View All Employees", "Add Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
@@ -202,7 +202,7 @@ var people_tracker = function () {
                 inquirer.prompt([
                     {
                         // Choose the Employee to Update
-                        type: "checkbox",
+                        type: "list",
                         name: "employee",
                         message: "Which employees role do you want to update?",
                         choices: () => {
