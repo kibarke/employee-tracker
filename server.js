@@ -1,5 +1,5 @@
 // My variables
-const help = require('inquirer');
+const inquirer = require('inquirer');
 const batComputer = require('./db/connection');
 
 // start the database / bat computer connection
@@ -10,12 +10,12 @@ batComputer.connect(err => {
 });
 
 var people_tracker = function () {
-    help.prompt([{
+    inquirer.prompt([{
         // Beginning the command line
-        type: 'checkbox',
+        type: 'list',
         name: 'prompt',
         message: 'What would you like to do?',
-        choices: ["View All Employees", "Add Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
+        choices: ["View All Employees", "Add An Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
     }]).then((answers) => {
         if (answers.prompt === "View All Employees") {
             batComputer.query(`SELECT * FROM employee`, (err, result) => {
@@ -23,14 +23,14 @@ var people_tracker = function () {
                 console.table(result);
                 people_tracker();
             });
-        } else if (answers.prompt === "View All Employees") {
+        } else if (answers.prompt === "View All Roles") {
             batComputer.query(`SELECT * FROM role`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Roles: ");
                 console.table(result);
                 people_tracker();
             });
-        } else if (answers.prompt === "Now Viewing All Departments") {
+        } else if (answers.prompt === "View All Departments") {
             batComputer.query(`SELECT * FROM department`, (err, result) =>
         {
             if (err) throw err;
@@ -39,8 +39,8 @@ var people_tracker = function () {
             people_tracker();
             });
         } else if (answers.prompt === "Add A Department") {
-            help.prompt([{
-                type: "input",
+            inquirer.prompt([{
+            type: "input",
             name: "department",
             message: "What is the name of the department?",
             validate: departmentsInput => {
@@ -62,7 +62,7 @@ var people_tracker = function () {
             // Department choices -- Chose the role that suits the employee
             batComputer.query(`SELECT * FROM departments`, (err, result) => {
                 if (err) throw err;
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Add a Role
                     type: "input",
@@ -92,7 +92,7 @@ var people_tracker = function () {
                         }
                     },
                     {
-                        type: "input",
+                    type: "input",
                     name: "departments",
                     message: "What is the name of the department?",
                     choices: () => {
@@ -122,7 +122,7 @@ var people_tracker = function () {
             // Calling the database to acquire the role and managers
             batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Add the First Employee Name
                         type: "input",
@@ -199,10 +199,10 @@ var people_tracker = function () {
             batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
 
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Choose the Employee to Update
-                        type: "checkbox",
+                        type: "list",
                         name: "employee",
                         message: "Which employees role do you want to update?",
                         choices: () => {

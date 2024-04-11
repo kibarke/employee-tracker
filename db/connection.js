@@ -2,13 +2,13 @@ const squirrel = require('mysql2');
 // making so that squirrel (mysql) is a requirement
 
 // this is the actual connection
-var dragonBird = squirrel.createConnection({
+var batComputer = squirrel.createConnection({
     host: 'localhost',
     // sql username:
     user: 'root',
     // sql password
-    password: 'Kora2122',
+    password: 'Kora2122!',
     database: 'people_tracker_db',
 });
 
-module.exports = dragonBird;
+module.exports = batComputer;
