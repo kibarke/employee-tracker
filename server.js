@@ -1,5 +1,5 @@
 // My variables
-const help = require('inquirer');
+const inquirer = require('inquirer');
 const batComputer = require('./db/connection');
 
 // start the database / bat computer connection
@@ -10,7 +10,7 @@ batComputer.connect(err => {
 });
 
 var people_tracker = function () {
-    help.prompt([{
+    inquirer.prompt([{
         // Beginning the command line
         type: 'checkbox',
         name: 'prompt',
@@ -39,8 +39,8 @@ var people_tracker = function () {
             people_tracker();
             });
         } else if (answers.prompt === "Add A Department") {
-            help.prompt([{
-                type: "input",
+            inquirer.prompt([{
+            type: "input",
             name: "department",
             message: "What is the name of the department?",
             validate: departmentsInput => {
@@ -62,7 +62,7 @@ var people_tracker = function () {
             // Department choices -- Chose the role that suits the employee
             batComputer.query(`SELECT * FROM departments`, (err, result) => {
                 if (err) throw err;
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Add a Role
                     type: "input",
@@ -92,7 +92,7 @@ var people_tracker = function () {
                         }
                     },
                     {
-                        type: "input",
+                    type: "input",
                     name: "departments",
                     message: "What is the name of the department?",
                     choices: () => {
@@ -122,7 +122,7 @@ var people_tracker = function () {
             // Calling the database to acquire the role and managers
             batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Add the First Employee Name
                         type: "input",
@@ -199,7 +199,7 @@ var people_tracker = function () {
             batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
 
-                help.prompt([
+                inquirer.prompt([
                     {
                         // Choose the Employee to Update
                         type: "checkbox",
