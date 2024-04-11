@@ -15,7 +15,7 @@ var people_tracker = function () {
         type: 'list',
         name: 'prompt',
         message: 'What would you like to do?',
-        choices: ["View All Employees", "Add Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
+        choices: ["View All Employees", "Add An Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
     }]).then((answers) => {
         if (answers.prompt === "View All Employees") {
             batComputer.query(`SELECT * FROM employee`, (err, result) => {
@@ -23,14 +23,14 @@ var people_tracker = function () {
                 console.table(result);
                 people_tracker();
             });
-        } else if (answers.prompt === "View All Employees") {
+        } else if (answers.prompt === "View All Roles") {
             batComputer.query(`SELECT * FROM role`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Roles: ");
                 console.table(result);
                 people_tracker();
             });
-        } else if (answers.prompt === "Now Viewing All Departments") {
+        } else if (answers.prompt === "View All Departments") {
             batComputer.query(`SELECT * FROM department`, (err, result) =>
         {
             if (err) throw err;
