@@ -2,7 +2,7 @@ const squirrel = require('mysql2');
 // making so that squirrel (mysql) is a requirement
 
 // this is the actual connection
-var batComputer = squirrel.createConnection({
+const batComputer = squirrel.createConnection({
     host: 'localhost',
     // sql username:
     user: 'root',
