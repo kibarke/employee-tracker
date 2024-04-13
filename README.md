@@ -29,4 +29,6 @@ WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 ```
 ### Help
-Juan Garcia (https://github.com/jgarcia45/employee-tracker?tab=readme-ov-file)
+Juan Garcia - https://github.com/jgarcia45/employee-tracker?tab=readme-ov-file
+
+Eden Khaos - https://github.com/EdenKhaos/12-mysql-employee-tracker
