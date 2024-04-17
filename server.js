@@ -33,7 +33,7 @@ var people_tracker = function () {
                 people_tracker();
             });
         } else if (answers.prompt === "View All Departments") {
-            batDataBase.query(`SELECT * FROM department`, (err, result) => {
+            batDataBase.query(`SELECT * FROM departments`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Departments: ");
                 console.table(result);
@@ -42,7 +42,7 @@ var people_tracker = function () {
         } else if (answers.prompt === "Add A Department") {
             inquirer.prompt([{
             type: "input",
-            name: "department",
+            name: "departments",
             message: "What is the name of the department?",
             validate: departmentsInput => {
                 if (departmentsInput) {
@@ -53,7 +53,7 @@ var people_tracker = function () {
                     }
                 }
             }]).then ((answers) => {
-                batDataBase.query(`INSERT INTO department (name) VALUES (?)`, [answers.departments], (err, result) => {
+                batDataBase.query(`INSERT INTO departments (name) VALUES (?)`, [answers.departments], (err, result) => {
                     if (err) throw err;
                     console.log(`Added ${answers.departments} to the Bat Computer.`)
                     people_tracker();
@@ -95,7 +95,7 @@ var people_tracker = function () {
                     },
                     {
                     type: "list",
-                    name: "department",
+                    name: "departments",
                     message: "What is the name of the department?",
                     choices: () => {
                         var array = [];
@@ -108,7 +108,7 @@ var people_tracker = function () {
                 ]).then((answers) => {
                     // Compares the result and storing into the variable, I don't know why or what it means.
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].name === answers.department) {
+                        if (result[i].name === answers.departments) {
                             var departments = result[i];
                         }
                     }
@@ -170,10 +170,10 @@ var people_tracker = function () {
                     },
                     {
                         // Add a Manager
-                    type: "input",
+                    type: "list",
                     name: "manager",
                     message: "Who is the employee's manger?",
-                    // choices: ["None", "Chiron", "Albus Dumbledore", "Tony Stark", "Sean Maguire", "Gandalf The Gray", "Charles Xavier"],
+                    choices: ["None", "Chiron", "Albus Dumbledore", "Tony Stark", "Sean Maguire", "Gandalf The Gray", "Charles Xavier"],
                         validate: managerInput => {
                             if (managerInput) {
                                 return true;
@@ -206,7 +206,7 @@ var people_tracker = function () {
                     {
                         // Choose the Employee to Update
                         type: "list",
-                        name: "employee",
+                        name: "employees",
                         message: "Which employees role do you want to update?",
                         choices: () => {
                             var list = [];
@@ -220,7 +220,7 @@ var people_tracker = function () {
                     {
                         // Role Update
                         type: 'list',
-                        name: 'role',
+                        name: 'roles',
                         message: 'What is their new role?',
                         choices: () => {
                             var array = [];
@@ -243,7 +243,7 @@ var people_tracker = function () {
                             var role = result[i];
                     }
                 }
-                batDataBase.query(`UPDATE employees SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                batDataBase.query(`UPDATE employees SET ? WHERE ?`, [{roles_id: roles}, {last_name: name}], (err, result) => {
                     if (err) throw err;
                     console.log(`Updated ${answers.employees} role to the database.`)
                     people_tracker();
