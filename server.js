@@ -1,6 +1,6 @@
 // My variables
 const inquirer = require('inquirer');
-const batDataBase = require('../employee-tracker/data'); // Can you tell that I like batman?
+const batDataBase = require('./data/connection'); // Can you tell that I like batman?
 
 
 // start the database / bat computer connection
@@ -19,14 +19,14 @@ var people_tracker = function () {
         choices: ["View All Employees", "Add An Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
     }]).then((answers) => {
         if (answers.prompt === "View All Employees") {
-            batDataBase.query(`SELECT * FROM employee`, (err, result) => {
+            batDataBase.query(`SELECT * FROM employees`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Employees: ");
                 console.table(result);
                 people_tracker();
             });
         } else if (answers.prompt === "View All Roles") {
-            batDataBase.query(`SELECT * FROM role`, (err, result) => {
+            batDataBase.query(`SELECT * FROM roles`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Roles: ");
                 console.table(result);
@@ -53,7 +53,7 @@ var people_tracker = function () {
                     }
                 }
             }]).then ((answers) => {
-                batDataBase.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, result) => {
+                batDataBase.query(`INSERT INTO department (name) VALUES (?)`, [answers.departments], (err, result) => {
                     if (err) throw err;
                     console.log(`Added ${answers.departments} to the Bat Computer.`)
                     people_tracker();
@@ -115,14 +115,14 @@ var people_tracker = function () {
                     
                     batDataBase.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [answers.roles, answers.salary, departments.id], (err, result) => {
                         if (err) throw err;
-                        console.log(`We added ${answers.role} to the Bat Computer.`)
+                        console.log(`We added ${answers.roles} to the Bat Computer.`)
                         people_tracker();
                     });
                 })
             });
         } else if (answers.prompt === "Add An Employee") {
             // Calling the database to acquire the role and managers
-            batDataBase.query(`SELECT * FROM employee, role`, (err, result) => {
+            batDataBase.query(`SELECT * FROM employees, roles`, (err, result) => {
                 if (err) throw err;
 
                 inquirer.prompt([
@@ -186,11 +186,11 @@ var people_tracker = function () {
                 ]).then((answers) => {
                     // Comparing and storing results, I think this is for the table
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].title === answers.role) {
+                        if (result[i].title === answers.roles) {
                             var role = result[i]; // var vs let have different meanings?
                         }
                     }
-                    batDataBase.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
+                    batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
                         if (err) throw err;
                         console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`)
                         people_tracker();
@@ -199,7 +199,7 @@ var people_tracker = function () {
             });
         } else if (answers.prompt === 'Update An Employee Role') {
              // calling the database/bat-computer to obtain the roles and managers
-             batDataBase.query(`SELECT * FROM employee, role`, (err, result) => {
+             batDataBase.query(`SELECT * FROM employees, roles`, (err, result) => {
                 if (err) throw err;
 
                 inquirer.prompt([
@@ -233,19 +233,19 @@ var people_tracker = function () {
                     }
                 ]).then((answers) => {
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].last_name === answers.employee) {
+                        if (result[i].last_name === answers.employees) {
                             var name = result[i];
                     }
                 } // wait why do I have this second thing again?
                     // yeah don't comment out this code nor delete it
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].title === answers.role) {
+                        if (result[i].title === answers.roles) {
                             var role = result[i];
                     }
                 }
-                batDataBase.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                batDataBase.query(`UPDATE employees SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
                     if (err) throw err;
-                    console.log(`Updated ${answers.employee} role to the database.`)
+                    console.log(`Updated ${answers.employees} role to the database.`)
                     people_tracker();
                 });
             })
