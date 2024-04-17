@@ -1,10 +1,10 @@
 // My variables
 const inquirer = require('inquirer');
-const batComputer = require('./db/connection');
+const batDataBase = require('../employee-tracker/data'); // Can you tell that I like batman?
 
 
 // start the database / bat computer connection
-batComputer.connect(err => {
+batDataBase.connect(err => {
     if (err) throw err;
     console.log('Bat Computer is watching.');
     people_tracker();
@@ -19,21 +19,21 @@ var people_tracker = function () {
         choices: ["View All Employees", "Add An Employee", "Update Employee Role", "View All Roles", "Add Role", "View All Departments", "Add Department", "Quit"]
     }]).then((answers) => {
         if (answers.prompt === "View All Employees") {
-            batComputer.query(`SELECT * FROM employee`, (err, result) => {
+            batDataBase.query(`SELECT * FROM employee`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Employees: ");
                 console.table(result);
                 people_tracker();
             });
         } else if (answers.prompt === "View All Roles") {
-            batComputer.query(`SELECT * FROM role`, (err, result) => {
+            batDataBase.query(`SELECT * FROM role`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Roles: ");
                 console.table(result);
                 people_tracker();
             });
         } else if (answers.prompt === "View All Departments") {
-            batComputer.query(`SELECT * FROM department`, (err, result) => {
+            batDataBase.query(`SELECT * FROM department`, (err, result) => {
                 if (err) throw err;
                 console.log("Now Viewing All Departments: ");
                 console.table(result);
@@ -53,7 +53,7 @@ var people_tracker = function () {
                     }
                 }
             }]).then ((answers) => {
-                batComputer.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, result) => {
+                batDataBase.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, result) => {
                     if (err) throw err;
                     console.log(`Added ${answers.departments} to the Bat Computer.`)
                     people_tracker();
@@ -61,7 +61,7 @@ var people_tracker = function () {
             })
         } else if (answers.prompt === `Add A Role`) {
             // Department choices -- Chose the role that suits the employee
-            batComputer.query(`SELECT * FROM departments`, (err, result) => {
+            batDataBase.query(`SELECT * FROM departments`, (err, result) => {
                 if (err) throw err;
                 
                 inquirer.prompt([
@@ -113,7 +113,7 @@ var people_tracker = function () {
                         }
                     }
                     
-                    batComputer.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [answers.roles, answers.salary, departments.id], (err, result) => {
+                    batDataBase.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [answers.roles, answers.salary, departments.id], (err, result) => {
                         if (err) throw err;
                         console.log(`We added ${answers.role} to the Bat Computer.`)
                         people_tracker();
@@ -122,7 +122,7 @@ var people_tracker = function () {
             });
         } else if (answers.prompt === "Add An Employee") {
             // Calling the database to acquire the role and managers
-            batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
+            batDataBase.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
 
                 inquirer.prompt([
@@ -190,7 +190,7 @@ var people_tracker = function () {
                             var role = result[i]; // var vs let have different meanings?
                         }
                     }
-                    batComputer.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
+                    batDataBase.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
                         if (err) throw err;
                         console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`)
                         people_tracker();
@@ -199,7 +199,7 @@ var people_tracker = function () {
             });
         } else if (answers.prompt === 'Update An Employee Role') {
              // calling the database/bat-computer to obtain the roles and managers
-            batComputer.query(`SELECT * FROM employee, role`, (err, result) => {
+             batDataBase.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err;
 
                 inquirer.prompt([
@@ -243,7 +243,7 @@ var people_tracker = function () {
                             var role = result[i];
                     }
                 }
-                batComputer.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                batDataBase.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
                     if (err) throw err;
                     console.log(`Updated ${answers.employee} role to the database.`)
                     people_tracker();
@@ -251,7 +251,7 @@ var people_tracker = function () {
             })
         });
         } else if (answers.prompt === 'Log Out') {
-            batComputer.end();
+            batDataBase.end();
             console.log("Bat Computer Signing Off!");
         }
     })    
