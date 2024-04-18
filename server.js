@@ -189,12 +189,16 @@ var people_tracker = function () {
                         if (result[i].title === answers.roles) {
                             var role = result[i]; // var vs let have different meanings?
                         }
-                    }
-                    batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
-                        if (err) throw err;
-                        console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`)
-                        people_tracker();
-                    });
+                    } if (answers.role && answers.manager) { // hey furture me, this is where the problem is
+                        batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
+                            if (err) {
+                                console.error("There was a problem adding the employee:", err);
+                            } else {
+                                console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`);
+                            }
+                        }
+                    );
+                }   
                 })
             });
         } else if (answers.prompt === 'Update An Employee Role') {
