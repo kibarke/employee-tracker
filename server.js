@@ -170,10 +170,10 @@ var people_tracker = function () {
                     },
                     {
                         // Add a Manager
-                    type: "list",
+                    type: "input",
                     name: "manager",
                     message: "Who is the employee's manger?",
-                    choices: ["None", "Chiron", "Albus Dumbledore", "Tony Stark", "Sean Maguire", "Gandalf The Gray", "Charles Xavier"],
+                    // choices: ["None", "Chiron", "Albus Dumbledore", "Tony Stark", "Sean Maguire", "Gandalf The Gray", "Charles Xavier"],
                         validate: managerInput => {
                             if (managerInput) {
                                 return true;
@@ -189,7 +189,7 @@ var people_tracker = function () {
                         if (result[i].title === answers.roles) {
                             var role = result[i]; // var vs let have different meanings?
                         }
-                    } if (answers.role && answers.manager) { // hey furture me, this is where the problem is
+                    } if (answers.role && answers.manager) { 
                         batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
                             if (err) {
                                 console.error("There was a problem adding the employee:", err);
