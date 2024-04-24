@@ -1,6 +1,16 @@
 // My variables
 const inquirer = require('inquirer');
-const batDataBase = require('./data/connection'); // Can you tell that I like batman?
+// const batDataBase = require('./data/connection'); // Can you tell that I like batman?
+
+const mySQL = require('mysql2');
+const batDataBase = mySQL.createConnection({
+    host: 'localhost',
+    // sql username:
+    user: 'root',
+    // sql password
+    password: 'Kora2122!',
+    database: 'people_tracker_db',
+});
 
 
 // start the database / bat computer connection
@@ -260,3 +270,5 @@ var people_tracker = function () {
         }
     })    
 };
+
+module.exports = batDataBase;
