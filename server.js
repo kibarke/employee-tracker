@@ -132,9 +132,9 @@ var people_tracker = function () {
             });
         } else if (answers.prompt === "Add An Employee") {
             // Calling the database to acquire the role and managers
-            batDataBase.query(`SELECT * FROM employees, roles`, (err, result) => {
+            batDataBase.query(`SELECT * FROM roles`, (err, result) => {
                 if (err) throw err;
-
+                console.log(result)
                 inquirer.prompt([
                     {
                         // Add the First Employee Name
@@ -172,7 +172,7 @@ var people_tracker = function () {
                         choices: () => {
                             var list = [];
                             for (var i = 0; i < result.length; i++) {
-                                list.push(result[i].title);
+                                list.push(result[i].id);
                             }
                             var newList = [...new Set(list)];
                             return newList;
@@ -194,21 +194,16 @@ var people_tracker = function () {
                         }
                     }
                 ]).then((answers) => {
-                    // Comparing and storing results, I think this is for the table
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].title === answers.roles) {
-                            var role = result[i]; // var vs let have different meanings?
+                    console.log(answers)
+                    batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role, answers.manager], (err, result) => {
+                        if (err) {
+                            console.error("There was a problem adding the employee:", err);
+                        } else {
+                            console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`);
+                            people_tracker();
                         }
-                    } if (answers.role && answers.manager) { 
-                        batDataBase.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, answers.role.id, answers.manager.id], (err, result) => {
-                            if (err) {
-                                console.error("There was a problem adding the employee:", err);
-                            } else {
-                                console.log(`Added ${answers.firstName} ${answers.lastName} to the Bat Computer.`);
-                            }
-                        }
-                    );
-                }   
+                    }
+                );
                 })
             });
         } else if (answers.prompt === 'Update An Employee Role') {

@@ -36,3 +36,5 @@ Eden Khaos - https://github.com/EdenKhaos/12-mysql-employee-tracker
 Free Code Academy - https://youtu.be/HXV3zeQKqGY?si=2QQN2xU4VA2iiZ9g
 
 Thomas Calle - https://github.com/ThomasCalle/Thomas-SQL-Employee-Tracker
+
+
